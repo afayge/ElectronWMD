@@ -1,11 +1,16 @@
 #!/bin/bash
-if [ -d "renderer" ]; then
+set -euo pipefail
+if [ -d "renderer" ] && [ "${1:-}" != "--force" ]; then
     echo "Renderer is present. It won't be rebuilt"
     exit
 fi
 
 cd webminidisc
-npm i --allow-git=root
-PUBLIC_URL="sandbox://app/" npm run build; rm -rf ../renderer; cp -rv dist ../renderer
+npm ci --no-audit --no-fund --allow-git=all
+PUBLIC_URL="sandbox://app/" npm run build
+# Build succeeds before replacing the previous renderer.
+rm -rf ../renderer.previous
+if [ -d ../renderer ]; then mv ../renderer ../renderer.previous; fi
+cp -R dist ../renderer
+rm -rf ../renderer.previous
 cd ..
-

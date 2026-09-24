@@ -5,3 +5,5 @@ renderer
 
 *.local
 EKBROOTS.DES
+
+.DS_Store
