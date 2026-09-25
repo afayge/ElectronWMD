@@ -1,3 +1,5 @@
+import { allowLocalFonts } from './local-font-permission';
+import { setupLabelPdf } from './label-pdf';
 import { net, app, BrowserWindow, ipcMain, protocol, dialog, FileFilter } from 'electron';
 import { importKeys } from 'networkwm-js';
 import path from 'path';
@@ -201,6 +203,8 @@ function setupEncoder() {
     });
 }
 
+ipcMain.handle('app:getVersion', () => app.getVersion());
+
 async function createWindow() {
     const window = new BrowserWindow({
         width: 1280,
@@ -212,13 +216,23 @@ async function createWindow() {
         },
     });
 
+    // Keep existing permission behavior for device integration; restrict local fonts to our main page.
+    window.webContents.session.setPermissionCheckHandler((contents, permission, origin, details) => {
+        if (String(permission) !== 'local-fonts') return true;
+        return allowLocalFonts(contents?.id, window.webContents.id, details.requestingUrl || contents?.getURL() || '', details.isMainFrame);
+    });
+    window.webContents.session.setPermissionRequestHandler((contents, permission, callback, details) => {
+        if (String(permission) !== 'local-fonts') { callback(true); return; }
+        callback(allowLocalFonts(contents.id, window.webContents.id, details.requestingUrl || contents.getURL(), details.isMainFrame));
+    });
     attachShutdownWindow(window);
+    setupLabelPdf(window);
     console.log(app.getPath('exe'))
 
     await integrate(window);
     window.setMenuBarVisibility(false);
     await window.loadURL('sandbox://app/index.html');
-    window.setTitle('Electron WMD');
+    window.setTitle(`ElectronWMD ${app.getVersion()}`);
 
     const store = new Store();
 

@@ -1,6 +1,6 @@
 {
   "name": "electronwmd",
-  "version": "0.5.2-1.5.4",
+  "version": "0.5.2-1.5.5",
   "description": "Electron version of WebMinidisc Pro",
   "main": "dist/main.js",
   "scripts": {
@@ -15,7 +15,8 @@
     "install:test-runtime": "node scripts/install-test-runtime.cjs",
     "test:smoke": "node scripts/run-smoke.cjs",
     "test:packaged": "node scripts/smoke-packaged.cjs",
-    "dist:win": "npm run build && electron-builder --config electron-builder.win.cjs --win zip --x64"
+    "dist:win": "npm run build && electron-builder --config electron-builder.win.cjs --win zip --x64",
+    "pack:labels": "node scripts/build-labels.cjs && electron-builder --mac --arm64 --dir --config electron-builder.labels.json"
   },
   "build": {
     "directories": {
@@ -44,6 +45,7 @@
   "author": "asivery",
   "private": true,
   "dependencies": {
+    "@xmldom/xmldom": "^0.9.12",
     "async-mutex": "^0.3.2",
     "electron-context-menu": "^3.6.1",
     "electron-prompt": "^1.7.0",
@@ -67,8 +69,8 @@
     "electron": "^44.0.0",
     "electron-builder": "^26.15.3",
     "prettier": "^2.7.1",
-    "typescript": "^5.9.3",
-    "resedit": "3.1.0"
+    "resedit": "3.1.0",
+    "typescript": "^5.9.3"
   },
   "overrides": {
     "yauzl": "^3.3.1"

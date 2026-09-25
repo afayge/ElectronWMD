@@ -87,3 +87,11 @@ Should you run into any issue, you can, of course, open a new issue on this gith
 
 
 Many thanks to [cybercase](https://github.com/cybercase) for writing the original Web MiniDisc and letting so many people experience this forgotten format again.
+
+## Offline MD labels and packaging
+
+The built-in **MD Label Editor** editor opens from the welcome page or device menu without connecting a recorder. It supports standard/full-face labels, J-Cards, cover inserts and tray cards, read-only track import, `.mdlabel` projects, and physical-size SVG/PDF exports.
+
+See [the Chinese editor guide](webminidisc/MD-LABELS.md) and [five example projects](webminidisc/examples/labels). Offline CJK fonts and their OFL license are bundled with the renderer. For the Apple Silicon MD Studio app, run `npm run pack:labels`. This command fully rebuilds the renderer and main/preload, verifies the version bridge and conversion controls, then packages `build/md-labels/mac-arm64/ElectronWMD.app`; any failure stops packaging. The label packaging configuration uses the local Electron runtime at `build/electron-43.3.0`. The legacy build still reuses an existing `renderer` directory.
+
+The desktop package is `0.5.2-1.5.5`; the upstream renderer remains `1.6.0`. The window title, About and Changelog show the desktop version obtained from Electron at runtime. Rebuild both sides when changing wrapper release notes or title-conversion controls.

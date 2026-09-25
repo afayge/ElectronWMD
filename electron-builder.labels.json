@@ -1,0 +1,28 @@
+{
+  "extends": null,
+  "electronVersion": "43.3.0",
+  "electronDist": "build/electron-43.3.0",
+  "appId": "com.electron.electronwmd",
+  "productName": "ElectronWMD",
+  "directories": {
+    "output": "build/md-labels",
+    "buildResources": "res"
+  },
+  "asar": false,
+  "npmRebuild": false,
+  "nodeGypRebuild": false,
+  "files": [
+    "dist",
+    "renderer",
+    "res",
+    "node_modules",
+    "package.json"
+  ],
+  "mac": {
+    "target": [
+      "dir"
+    ],
+    "identity": "-",
+    "category": "public.app-category.music"
+  }
+}

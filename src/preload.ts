@@ -24,27 +24,12 @@ export interface ChangelogVersionInjection {
 
 export const CHANGELOG: ChangelogVersionInjection[] = [
     {
-        before: 'Version 1.5.3',
+        before: 'Version 1.5.4',
         entry: {
-            name: 'Version 1.5.4',
+            name: 'Version 1.5.5',
             contents: [
-                {
-                    type: 'sublist',
-                    name: 'Improved shutdown and restart stability',
-                    content: [
-                        "Wait for active device operations and pending disc updates before closing USB connections",
-                        "Coordinate macOS helper shutdown and allow retrying failed cleanup without forcing the app to quit",
-                    ],
-                },
-                {
-                    type: 'sublist',
-                    name: 'Added Pinyin and Japanese character conversion for NetMD titles',
-                    content: [
-                        "Edit the original Unicode title and convert it to Pinyin with saved spacing and capitalization settings",
-                        "Convert Chinese characters to Japanese character forms with To JIS and check device character compatibility and title length before saving",
-                        "Read original titles from music file tags and preserve saved title edits when reordering or extending the upload queue",
-                    ],
-                },
+                'Improved shutdown and restart stability',
+                'Added Pinyin and Japanese character conversion for NetMD titles',
             ],
         },
     },
@@ -180,7 +165,10 @@ export const CHANGELOG: ChangelogVersionInjection[] = [
         return ipcRenderer.invoke('reload');
     }
 
+    const appVersion: string = await ipcRenderer.invoke('app:getVersion');
     contextBridge.exposeInMainWorld('native', {
+        appVersion,
+        labels: { renderPdf: (request: unknown) => ipcRenderer.invoke('labels:renderPdf', request) },
         unrestrictedFetchJSON,
 
         getSettings: loadSettings,
@@ -201,6 +189,7 @@ export const CHANGELOG: ChangelogVersionInjection[] = [
         _debug_himdList: (a: string) => ipcRenderer.invoke('_debug_himdList', a),
     });
 
+    window.dispatchEvent(new Event('ewmd-native-ready'));
     console.log('====PRELOAD COMPLETE====');
     console.groupEnd();
 })();
