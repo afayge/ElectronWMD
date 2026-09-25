@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-if [ -d "renderer" ] && [ "${1:-}" != "--force" ]; then
+if [ -d "renderer" ]; then
     echo "Renderer is present. It won't be rebuilt"
     exit
 fi
